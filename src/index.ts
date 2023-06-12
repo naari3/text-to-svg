@@ -4,22 +4,36 @@
 
 import * as opentype from 'opentype.js';
 
-const DEFAULT_FONT = require('path').join(__dirname, '../fonts/ipag.ttf');
+// const DEFAULT_FONT = (await import("path")).join(__dirname, '../fonts/ipag.ttf');
+const DEFAULT_FONT = '../fonts/ipag.ttf';
 
 // Private method
 
-function parseAnchorOption(anchor) {
-  let horizontal = anchor.match(/left|center|right/gi) || [];
-  horizontal = horizontal.length === 0 ? 'left' : horizontal[0];
+function parseAnchorOption(anchor: string) {
+  const hol = anchor.match(/left|center|right/gi) || [];
+  const horizontal = hol.length === 0 ? 'left' : hol[0];
 
-  let vertical = anchor.match(/baseline|top|bottom|middle/gi) || [];
-  vertical = vertical.length === 0 ? 'baseline' : vertical[0];
+  let ver = anchor.match(/baseline|top|bottom|middle/gi) || [];
+  const vertical = ver.length === 0 ? 'baseline' : ver[0];
 
   return { horizontal, vertical };
 }
 
+interface TextOptions {
+  fontSize?: number;
+  kerning?: boolean;
+  letterSpacing?: number;
+  tracking?: number;
+  anchor?: string;
+  x?: number;
+  y?: number;
+  attributes?: Record<string, any>;
+}
+
+
 export default class TextToSVG {
-  constructor(font) {
+  font: opentype.Font;
+  constructor(font: opentype.Font) {
     this.font = font;
   }
 
@@ -27,17 +41,17 @@ export default class TextToSVG {
     return new TextToSVG(opentype.loadSync(file));
   }
 
-  static load(url, cb) {
+  static load(url: string, cb: (error: any, t2s?: TextToSVG) => void) {
     opentype.load(url, (err, font) => {
-      if (err !== null) {
-        return cb(err, null);
+      if (err !== null || !font) {
+        return cb(err, undefined);
       }
 
       return cb(null, new TextToSVG(font));
     });
   }
 
-  getWidth(text, options) {
+  getWidth(text: string, options: TextOptions) {
     const fontSize = options.fontSize || 72;
     const kerning = 'kerning' in options ? options.kerning : true;
     const fontScale = 1 / this.font.unitsPerEm * fontSize;
@@ -65,12 +79,12 @@ export default class TextToSVG {
     return width;
   }
 
-  getHeight(fontSize) {
+  getHeight(fontSize: number) {
     const fontScale = 1 / this.font.unitsPerEm * fontSize;
     return (this.font.ascender - this.font.descender) * fontScale;
   }
 
-  getMetrics(text, options = {}) {
+  getMetrics(text: string, options: TextOptions = {}) {
     const fontSize = options.fontSize || 72;
     const anchor = parseAnchorOption(options.anchor || '');
 
@@ -127,19 +141,20 @@ export default class TextToSVG {
     };
   }
 
-  getD(text, options = {}) {
+  getD(text: string, options: TextOptions = {}) {
     const fontSize = options.fontSize || 72;
     const kerning = 'kerning' in options ? options.kerning : true;
-    const letterSpacing = 'letterSpacing' in options ? options.letterSpacing : false;
-    const tracking = 'tracking' in options ? options.tracking : false;
+    const letterSpacing = 'letterSpacing' in options ? options.letterSpacing : undefined;
+    const tracking = 'tracking' in options ? options.tracking : undefined;
     const metrics = this.getMetrics(text, options);
     const path = this.font.getPath(text, metrics.x, metrics.baseline, fontSize, { kerning, letterSpacing, tracking });
 
-    return path.toPathData();
+    return path.toPathData(2);
   }
 
-  getPath(text, options = {}) {
+  getPath(text: string, options: TextOptions = {}) {
     const attributes = Object.keys(options.attributes || {})
+    // @ts-ignore
       .map(key => `${key}="${options.attributes[key]}"`)
       .join(' ');
     const d = this.getD(text, options);
@@ -151,7 +166,7 @@ export default class TextToSVG {
     return `<path d="${d}"/>`;
   }
 
-  getSVG(text, options = {}) {
+  getSVG(text: string, options: TextOptions = {}) {
     const metrics = this.getMetrics(text, options);
     let svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${metrics.width}" height="${metrics.height}">`;
     svg += this.getPath(text, options);
@@ -160,7 +175,7 @@ export default class TextToSVG {
     return svg;
   }
 
-  getDebugSVG(text, options = {}) {
+  getDebugSVG(text: string, options: TextOptions = {}) {
     options = JSON.parse(JSON.stringify(options));
 
     options.x = options.x || 0;
@@ -188,5 +203,3 @@ export default class TextToSVG {
     return svg;
   }
 }
-
-module.exports = exports.default;

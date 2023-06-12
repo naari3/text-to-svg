@@ -4,7 +4,7 @@
 
 /* eslint-disable no-undef */
 
-import TextToSVG from '../src';
+import TextToSVG from '../lib/index.js';
 
 window.addEventListener('load', () => {
   const fontURLInput = document.querySelector('#font-url-input');

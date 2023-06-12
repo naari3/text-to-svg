@@ -2,7 +2,10 @@
   "name": "text-to-svg",
   "version": "3.1.5",
   "description": "Convert text to SVG path without native dependence.",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "type": "module",
+  "module": "lib/index.js",
   "files": [
     ".gitignore",
     "CHANGELOG.md",
@@ -25,8 +28,9 @@
     "test:html": "gulp test:html",
     "clean": "gulp clean",
     "lint": "gulp lint",
-    "build": "gulp build",
-    "prepack": "npm run build"
+    "build": "tsc -p .",
+    "prepack": "npm run build",
+    "serve": "serve -p 8080"
   },
   "repository": {
     "type": "git",
@@ -54,6 +58,8 @@
     "@babel/core": "^7.3.4",
     "@babel/preset-env": "^7.3.4",
     "@babel/register": "^7.0.0",
+    "@types/node": "^20.3.0",
+    "@types/opentype.js": "^1.3.4",
     "browserify": "^16.2.3",
     "del": "^3.0.0",
     "eslint-plugin-arrow-function": "^2.0.0",
@@ -63,11 +69,11 @@
     "gulp-babel": "^8.0.0",
     "gulp-eslint": "^5.0.0",
     "gulp-mocha": "^6.0.0",
+    "serve": "^14.2.0",
+    "typescript": "^5.1.3",
     "vinyl-source-stream": "^2.0.0"
   },
-  "babel": {
-    "presets": [
-      "@babel/preset-env"
-    ]
+  "peerDependencies": {
+    "typescript": ">=5"
   }
 }
