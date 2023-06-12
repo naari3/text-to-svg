@@ -175,7 +175,7 @@ These are released under the [MIT license](https://opensource.org/licenses/MIT)
 
 [npm-url]: https://npmjs.org/package/text-to-svg
 [npm-image]: https://badge.fury.io/js/text-to-svg.svg
-[travis-url]: https://travis-ci.org/shrhdk/text-to-svg
-[travis-image]: https://travis-ci.org/shrhdk/text-to-svg.svg?branch=master
-[gitter-url]: https://gitter.im/shrhdk/text-to-svg
+[travis-url]: https://travis-ci.org/naari3/text-to-svg
+[travis-image]: https://travis-ci.org/naari3/text-to-svg.svg?branch=master
+[gitter-url]: https://gitter.im/naari3/text-to-svg
 [gitter-image]: https://badges.gitter.im/Join%20Chat.svg

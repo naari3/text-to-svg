@@ -1,6 +1,6 @@
 {
-  "name": "text-to-svg",
-  "version": "3.1.5",
+  "name": "@naari3/text-to-svg",
+  "version": "3.2.5",
   "description": "Convert text to SVG path without native dependence.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -31,7 +31,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/shrhdk/text-to-svg"
+    "url": "https://github.com/naari3/text-to-svg"
   },
   "keywords": [
     "fonts",
@@ -44,9 +44,9 @@
   "author": "Hideki Shiro",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/shrhdk/text-to-svg/issues"
+    "url": "https://github.com/naari3/text-to-svg/issues"
   },
-  "homepage": "https://github.com/shrhdk/text-to-svg",
+  "homepage": "https://github.com/naari3/text-to-svg",
   "dependencies": {
     "commander": "^2.11.0",
     "opentype.js": "0.11.0"
