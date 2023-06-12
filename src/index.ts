@@ -5,7 +5,9 @@
 import * as opentype from 'opentype.js';
 
 // const DEFAULT_FONT = (await import("path")).join(__dirname, '../fonts/ipag.ttf');
-const DEFAULT_FONT = '../fonts/ipag.ttf';
+import { join } from 'path';
+const DEFAULT_FONT = join(__dirname, '../fonts/ipag.ttf');
+// const DEFAULT_FONT = '../fonts/ipag.ttf';
 
 // Private method
 
@@ -86,6 +88,69 @@ export default class TextToSVG {
 
   getMetrics(text: string, options: TextOptions = {}) {
     const fontSize = options.fontSize || 72;
+    const widths: number[] = [];
+    const heights: number[] = [];
+    text.split("\n").forEach((line, i) => {
+      widths.push(this.getWidth(line, options));
+      heights.push(this.getHeight(fontSize));
+    });
+    const anchor = parseAnchorOption(options.anchor || '');
+
+    const width = Math.max(...widths);
+    const height = heights.reduce((a, b) => a + b, 0);
+
+    const fontScale = 1 / this.font.unitsPerEm * fontSize;
+    const ascender = this.font.ascender * fontScale;
+    const descender = this.font.descender * fontScale;
+
+    let x = options.x || 0;
+    switch (anchor.horizontal) {
+      case 'left':
+        x -= 0;
+        break;
+      case 'center':
+        x -= width / 2;
+        break;
+      case 'right':
+        x -= width;
+        break;
+      default:
+        throw new Error(`Unknown anchor option: ${anchor.horizontal}`);
+    }
+
+    let y = options.y || 0;
+    switch (anchor.vertical) {
+      case 'baseline':
+        y -= ascender;
+        break;
+      case 'top':
+        y -= 0;
+        break;
+      case 'middle':
+        y -= height / 2;
+        break;
+      case 'bottom':
+        y -= height;
+        break;
+      default:
+        throw new Error(`Unknown anchor option: ${anchor.vertical}`);
+    }
+
+    const baseline = y + ascender;
+
+    return {
+      x,
+      y,
+      baseline,
+      width,
+      height,
+      ascender,
+      descender,
+    };
+  }
+
+  getMetricsForLine(text: string, options: TextOptions = {}) {
+    const fontSize = options.fontSize || 72;
     const anchor = parseAnchorOption(options.anchor || '');
 
     const width = this.getWidth(text, options);
@@ -141,13 +206,13 @@ export default class TextToSVG {
     };
   }
 
-  getD(text: string, options: TextOptions = {}) {
+  getD(line: string, options: TextOptions = {}) {
     const fontSize = options.fontSize || 72;
     const kerning = 'kerning' in options ? options.kerning : true;
     const letterSpacing = 'letterSpacing' in options ? options.letterSpacing : undefined;
     const tracking = 'tracking' in options ? options.tracking : undefined;
-    const metrics = this.getMetrics(text, options);
-    const path = this.font.getPath(text, metrics.x, metrics.baseline, fontSize, { kerning, letterSpacing, tracking });
+    const metrics = this.getMetricsForLine(line, options);
+    const path = this.font.getPath(line, metrics.x, metrics.baseline, fontSize, { kerning, letterSpacing, tracking });
 
     return path.toPathData(2);
   }
@@ -157,7 +222,11 @@ export default class TextToSVG {
     // @ts-ignore
       .map(key => `${key}="${options.attributes[key]}"`)
       .join(' ');
-    const d = this.getD(text, options);
+    const ds: string[] = [];
+    text.split("\n").forEach((line, i) => {
+      ds.push(this.getD(line, {...options, y: (options.y ?? 0) + (options.fontSize || 72) * i}));
+    });
+    const d = ds.join(" ");
 
     if (attributes) {
       return `<path ${attributes} d="${d}"/>`;
@@ -168,7 +237,9 @@ export default class TextToSVG {
 
   getSVG(text: string, options: TextOptions = {}) {
     const metrics = this.getMetrics(text, options);
-    let svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${metrics.width}" height="${metrics.height}">`;
+    const width = metrics.width;
+    const height = metrics.height;
+    let svg = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${width}" height="${height}">`;
     svg += this.getPath(text, options);
     svg += '</svg>';
 

@@ -12,9 +12,8 @@
     "README.md",
     "package.json",
     "node_modules",
-    "gulpfile.js",
     "index.js",
-    "build",
+    "lib",
     "src",
     "test",
     "fonts",
@@ -24,9 +23,7 @@
     "text-to-svg": "bin/text-to-svg"
   },
   "scripts": {
-    "test": "gulp test",
-    "test:html": "gulp test:html",
-    "clean": "gulp clean",
+    "test": "vitest",
     "lint": "gulp lint",
     "build": "tsc -p .",
     "prepack": "npm run build",
@@ -55,23 +52,15 @@
     "opentype.js": "0.11.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.3.4",
-    "@babel/preset-env": "^7.3.4",
-    "@babel/register": "^7.0.0",
     "@types/node": "^20.3.0",
     "@types/opentype.js": "^1.3.4",
-    "browserify": "^16.2.3",
-    "del": "^3.0.0",
     "eslint-plugin-arrow-function": "^2.0.0",
     "eslint-plugin-classes": "^0.1.1",
     "eslint-plugin-template-string": "^1.0.0",
-    "gulp": "^4.0.0",
-    "gulp-babel": "^8.0.0",
-    "gulp-eslint": "^5.0.0",
-    "gulp-mocha": "^6.0.0",
     "serve": "^14.2.0",
     "typescript": "^5.1.3",
-    "vinyl-source-stream": "^2.0.0"
+    "vite": "^4.3.9",
+    "vitest": "^0.32.0"
   },
   "peerDependencies": {
     "typescript": ">=5"

@@ -4,6 +4,7 @@
 
 import assert from 'assert';
 import TextToSVG from '../src';
+import { describe, it } from 'vitest';
 
 function assertAlmostEqual(a, b, epsilon) {
   assert.strictEqual(Math.abs(a - b) < epsilon, true);
