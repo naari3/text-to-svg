@@ -5,9 +5,9 @@
 import * as opentype from 'opentype.js';
 
 // const DEFAULT_FONT = (await import("path")).join(__dirname, '../fonts/ipag.ttf');
-import { join } from 'path';
-const DEFAULT_FONT = join(__dirname, '../fonts/ipag.ttf');
-// const DEFAULT_FONT = '../fonts/ipag.ttf';
+// import { join } from 'path';
+// const DEFAULT_FONT = join(__dirname, '../fonts/ipag.ttf');
+const DEFAULT_FONT = './fonts/ipag.ttf';
 
 // Private method
 
