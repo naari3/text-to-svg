@@ -1,6 +1,6 @@
 {
   "name": "@naari3/text-to-svg",
-  "version": "3.2.6",
+  "version": "3.2.7",
   "description": "Convert text to SVG path without native dependence.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -13,20 +13,18 @@
     "package.json",
     "node_modules",
     "index.js",
+    "index.d.ts",
     "lib",
     "src",
     "test",
     "fonts"
   ],
-  "bin": {
-    "text-to-svg": "bin/text-to-svg"
-  },
   "scripts": {
     "test": "vitest",
     "lint": "gulp lint",
     "build": "tsc -p .",
     "prepack": "npm run build",
-    "serve": "serve -p 8080"
+    "vite": "vite"
   },
   "repository": {
     "type": "git",
