@@ -1,6 +1,6 @@
 {
   "name": "@naari3/text-to-svg",
-  "version": "3.2.5",
+  "version": "3.2.6",
   "description": "Convert text to SVG path without native dependence.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
