@@ -6,19 +6,6 @@
   "types": "lib/index.d.ts",
   "type": "module",
   "module": "lib/index.js",
-  "files": [
-    ".gitignore",
-    "CHANGELOG.md",
-    "README.md",
-    "package.json",
-    "node_modules",
-    "index.js",
-    "index.d.ts",
-    "lib",
-    "src",
-    "test",
-    "fonts"
-  ],
   "scripts": {
     "test": "vitest",
     "lint": "gulp lint",
