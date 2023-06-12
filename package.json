@@ -16,8 +16,7 @@
     "lib",
     "src",
     "test",
-    "fonts",
-    "bin"
+    "fonts"
   ],
   "bin": {
     "text-to-svg": "bin/text-to-svg"
